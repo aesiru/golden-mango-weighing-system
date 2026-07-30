@@ -246,6 +246,7 @@ The ESP32 on the packing floor:
 
 ---
 
+<!--
 ## API Reference
 
 Full interactive docs: `http://localhost:8000/docs`
@@ -352,7 +353,8 @@ echo "NUXT_PUBLIC_API_URL=http://localhost:8000/api" > frontend/.env
 
 ---
 
-## Tech Stack
+
+-->## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
