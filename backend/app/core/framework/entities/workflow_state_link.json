@@ -1,0 +1,54 @@
+{
+  "name": "workflow_state_link",
+  "label": "Workflow State Link",
+  "module": "core",
+  "table_name": "core_workflow_state_links",
+  "title_field": "workflow_id",
+  "in_sidebar": false,
+  "icon": "link",
+  "group": "Workflow",
+  "naming": "WSL-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "workflow_id",
+      "label": "Workflow",
+      "field_type": "link",
+      "link_entity": "workflow",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "state_id",
+      "label": "State",
+      "field_type": "link",
+      "link_entity": "workflow_state",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "is_initial",
+      "label": "Initial State",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "sort_order",
+      "label": "Sort Order",
+      "field_type": "int",
+      "required": true,
+      "default": 0,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

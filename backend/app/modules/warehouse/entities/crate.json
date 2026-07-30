@@ -1,0 +1,45 @@
+{
+  "name": "crate",
+  "label": "Crate",
+  "module": "warehouse",
+  "table_name": "crate",
+  "title_field": "code",
+  "in_sidebar": 1,
+  "fields": [
+    {
+      "name": "code",
+      "field_type": "string",
+      "required": true,
+      "unique": true
+    },
+    {
+      "name": "order",
+      "field_type": "link",
+      "link_entity": "order",
+      "required": true
+    },
+    {
+      "name": "crate_class",
+      "field_type": "link",
+      "link_entity": "crate_class",
+      "required": true
+    },
+    {
+      "name": "target",
+      "field_type": "float"
+    },
+    {
+      "name": "counted",
+      "field_type": "float",
+      "default": 0.0
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "company": [
+      "read"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "error_log",
+  "label": "Error Log",
+  "module": "core",
+  "table_name": "core_error_log",
+  "title_field": "title",
+  "in_sidebar": true,
+  "icon": "alert-circle",
+  "group": "System",
+  "naming": "ERR-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "status",
+      "label": "Status Code",
+      "field_type": "int",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "title",
+      "label": "Title",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "message",
+      "label": "Message",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ]
+  }
+}

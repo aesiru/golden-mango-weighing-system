@@ -1,0 +1,60 @@
+{
+  "name": "company",
+  "label": "Company",
+  "module": "warehouse",
+  "table_name": "company",
+  "title_field": "name",
+  "in_sidebar": 1,
+  "fields": [
+    {
+      "name": "name",
+      "field_type": "string",
+      "required": true
+    },
+    {
+      "name": "contact_person",
+      "field_type": "string"
+    },
+    {
+      "name": "email",
+      "field_type": "string",
+      "required": true,
+      "unique": true
+    },
+    {
+      "name": "phone",
+      "field_type": "string"
+    },
+    {
+      "name": "address",
+      "field_type": "text"
+    },
+    {
+      "name": "registration_date",
+      "field_type": "datetime"
+    },
+    {
+      "name": "status",
+      "field_type": "string",
+      "options": [
+        "pending",
+        "approved"
+      ],
+      "default": "pending"
+    },
+    {
+      "name": "user",
+      "field_type": "link",
+      "link_entity": "user"
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "company": [
+      "read",
+      "update"
+    ]
+  }
+}

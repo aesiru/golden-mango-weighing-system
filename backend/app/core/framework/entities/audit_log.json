@@ -1,0 +1,88 @@
+{
+  "name": "audit_log",
+  "label": "Audit Log",
+  "module": "core",
+  "table_name": "core_audit_log",
+  "title_field": "entity_name",
+  "in_sidebar": false,
+  "icon": "clipboard-list",
+  "group": "System",
+  "naming": "AUD-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "entity_name",
+      "label": "Entity Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "record_id",
+      "label": "Record ID",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "action",
+      "label": "Action",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true,
+      "options": [
+        "create",
+        "update",
+        "delete",
+        "workflow"
+      ]
+    },
+    {
+      "name": "user_id",
+      "label": "User ID",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "username",
+      "label": "Username",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "before_snapshot",
+      "label": "Before Snapshot",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "after_snapshot",
+      "label": "After Snapshot",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "changed_fields",
+      "label": "Changed Fields",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

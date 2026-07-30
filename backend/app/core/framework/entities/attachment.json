@@ -1,0 +1,95 @@
+{
+  "name": "attachment",
+  "label": "Attachment",
+  "module": "core",
+  "table_name": "core_attachment",
+  "title_field": "original_name",
+  "in_sidebar": false,
+  "icon": "paperclip",
+  "group": "System",
+  "naming": "ATT-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "entity_name",
+      "label": "Entity Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "record_id",
+      "label": "Record ID",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "file_name",
+      "label": "File Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "original_name",
+      "label": "Original Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "file_path",
+      "label": "File Path",
+      "field_type": "string",
+      "required": true
+    },
+    {
+      "name": "file_size",
+      "label": "File Size",
+      "field_type": "int",
+      "required": true,
+      "default": 0
+    },
+    {
+      "name": "mime_type",
+      "label": "MIME Type",
+      "field_type": "string",
+      "required": false
+    },
+    {
+      "name": "uploaded_by",
+      "label": "Uploaded By",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read",
+      "create",
+      "delete"
+    ],
+    "User": [
+      "read",
+      "create"
+    ]
+  }
+}

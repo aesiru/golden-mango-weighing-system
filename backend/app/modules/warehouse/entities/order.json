@@ -1,0 +1,52 @@
+{
+  "name": "order",
+  "label": "Order",
+  "module": "warehouse",
+  "table_name": "order",
+  "title_field": "name",
+  "naming": "ORD-{####}",
+  "in_sidebar": 1,
+  "fields": [
+    {
+      "name": "company",
+      "field_type": "link",
+      "link_entity": "company",
+      "required": true
+    },
+    {
+      "name": "crate_class",
+      "field_type": "link",
+      "link_entity": "crate_class",
+      "required": true
+    },
+    {
+      "name": "total_amount",
+      "field_type": "float"
+    },
+    {
+      "name": "current_amount",
+      "field_type": "float",
+      "default": 0.0
+    },
+    {
+      "name": "status",
+      "field_type": "string",
+      "options": [
+        "pending",
+        "in-progress",
+        "completed",
+        "shipped"
+      ],
+      "default": "pending"
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "company": [
+      "read",
+      "create"
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "name": "entity_permission",
+  "label": "Entity Permission",
+  "module": "core",
+  "table_name": "core_entity_permissions",
+  "title_field": "entity_name",
+  "in_sidebar": false,
+  "icon": "key",
+  "group": "Authentication",
+  "search": true,
+  "naming": "PRM-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "role",
+      "label": "Role",
+      "field_type": "link",
+      "target": "role",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "entity_name",
+      "label": "Entity Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "can_read",
+      "label": "Can Read",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_create",
+      "label": "Can Create",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_update",
+      "label": "Can Update",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_delete",
+      "label": "Can Delete",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_select",
+      "label": "Can Select",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_export",
+      "label": "Can Export",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "can_import",
+      "label": "Can Import",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    },
+    {
+      "name": "in_sidebar",
+      "label": "In Sidebar",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read",
+      "create",
+      "update"
+    ],
+    "User": [
+      "read"
+    ]
+  }
+}

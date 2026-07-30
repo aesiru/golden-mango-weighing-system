@@ -1,0 +1,102 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stock Count — {{ record.id or record_id }}</title>
+  {{ print_styles() }}
+</head>
+<body>
+<div class="print-container">
+
+  {{ branding_header(branding, title="Stock Count", subtitle=record.id or record_id) }}
+
+  <!-- Stock Count Details -->
+  <div class="form-section">
+    <div class="section-header"><span>Stock Count Details</span></div>
+    <div class="meta-grid-4" style="margin-top:8px;">
+      <div class="meta-item">
+        <span class="label">Stock Count ID</span>
+        <span class="value">{{ record.id or record_id }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">{{ record.workflow_state or '' }}</span>
+      </div>
+      {% if record.store %}
+      <div class="meta-item">
+        <span class="label">Store</span>
+        <span class="value">{{ record.store or '' }}</span>
+      </div>
+      {% endif %}
+      {% if record.site %}
+      <div class="meta-item">
+        <span class="label">Site</span>
+        <span class="value">{{ record.site or '' }}</span>
+      </div>
+      {% endif %}
+      {% if record.method %}
+      <div class="meta-item">
+        <span class="label">Method</span>
+        <span class="value">{{ record.method or '' }}</span>
+      </div>
+      {% endif %}
+      {% if record.basis %}
+      <div class="meta-item">
+        <span class="label">Basis</span>
+        <span class="value">{{ record.basis or '' }}</span>
+      </div>
+      {% endif %}
+      {% if record.freeze_policy %}
+      <div class="meta-item">
+        <span class="label">Freeze Policy</span>
+        <span class="value">{{ record.freeze_policy or '' }}</span>
+      </div>
+      {% endif %}
+      <div class="meta-item">
+        <span class="label">Count Date</span>
+        <span class="value">{{ record.count_date or record.transaction_date or '' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Child tables (Line Items) -->
+  {% for child in children %}
+  <div class="form-section">
+    <div class="section-header"><span>{{ child.label }}</span></div>
+    {% if child.rows %}
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th style="width:24px;">#</th>
+          {% for col in child.columns %}<th>{{ col.label }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in child.rows %}
+        <tr>
+          <td class="center">{{ loop.index }}</td>
+          {% for col in child.columns %}
+          <td class="center">{{ row.get(col.name, '') or '' }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="font-size:11px; color:#888; padding:4px 0;">No line items.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <!-- Signatures -->
+  <div class="sig-section" style="margin-top:20px;">
+    <div class="sig-block"><div class="sig-line">Counted by:</div></div>
+    <div class="sig-block"><div class="sig-line">Verified by:</div></div>
+    <div class="sig-block"><div class="sig-line">Approved by:</div></div>
+  </div>
+
+  {{ print_footer(branding) }}
+</div>
+</body>
+</html>

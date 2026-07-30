@@ -1,0 +1,73 @@
+{
+  "name": "workflow",
+  "label": "Workflow",
+  "module": "core",
+  "table_name": "core_workflows",
+  "title_field": "name",
+  "in_sidebar": false,
+  "icon": "git-branch",
+  "group": "Workflow",
+  "search_fields": [
+    "name",
+    "target_entity"
+  ],
+  "naming": "WFL-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "name",
+      "label": "Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "target_entity",
+      "label": "Target Entity",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "is_active",
+      "label": "Active",
+      "field_type": "boolean",
+      "required": true,
+      "default": true,
+      "in_list_view": true
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "updated_at",
+      "label": "Updated At",
+      "field_type": "datetime",
+      "readonly": true
+    }
+  ],
+  "links": [
+    {
+      "entity": "workflow_state_link",
+      "fk_field": "workflow_id",
+      "label": "State Links"
+    },
+    {
+      "entity": "workflow_transition",
+      "fk_field": "workflow_id",
+      "label": "Transitions"
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

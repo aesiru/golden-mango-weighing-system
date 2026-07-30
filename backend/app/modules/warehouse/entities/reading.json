@@ -1,0 +1,46 @@
+{
+  "name": "reading",
+  "label": "Reading",
+  "module": "warehouse",
+  "table_name": "reading",
+  "title_field": "name",
+  "naming": "RDG-{######}",
+  "in_sidebar": 1,
+  "fields": [
+    {
+      "name": "crate",
+      "field_type": "link",
+      "link_entity": "crate",
+      "required": true
+    },
+    {
+      "name": "order",
+      "field_type": "link",
+      "link_entity": "order",
+      "required": true
+    },
+    {
+      "name": "weight_grams",
+      "field_type": "float",
+      "required": true
+    },
+    {
+      "name": "recorded_at",
+      "field_type": "datetime",
+      "required": true
+    },
+    {
+      "name": "valid",
+      "field_type": "boolean",
+      "default": false
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "company": [
+      "read"
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+name: Database Backup
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to backup'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+
+jobs:
+  backup-database:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Create database backup
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.PROD_USER }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        script: |
+          # Create backup directory if it doesn't exist
+          mkdir -p /home/cwadmin/backups
+          
+          # Generate backup filename with timestamp
+          BACKUP_FILE="/home/cwadmin/backups/eam_backup_$(date +%Y%m%d_%H%M%S).sql"
+          
+          # Create database backup
+          PGPASSWORD=${{ secrets.DB_PASSWORD }} pg_dump \
+            -h ${{ secrets.DB_HOST }} \
+            -U ${{ secrets.DB_USER }} \
+            -d ${{ secrets.DB_NAME }} \
+            --no-password \
+            --verbose \
+            --clean \
+            --if-exists \
+            --format=custom \
+            --compress=9 \
+            --file="$BACKUP_FILE"
+          
+          echo "Backup created: $BACKUP_FILE"
+          
+          # Keep only last 7 days of backups
+          find /home/cwadmin/backups -name "eam_backup_*.sql" -mtime +7 -delete
+          
+          # List current backups
+          echo "Current backups:"
+          ls -lh /home/cwadmin/backups/eam_backup_*.sql
+          
+    - name: Upload backup to cloud storage (optional)
+      if: github.event_name == 'schedule'
+      uses: actions/upload-artifact@v3
+      with:
+        name: database-backup-${{ github.run_number }}
+        path: /tmp/backup.sql
+        retention-days: 30

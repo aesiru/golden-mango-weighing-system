@@ -1,0 +1,120 @@
+{
+  "name": "email_log",
+  "label": "Email Log",
+  "module": "core",
+  "table_name": "core_email_log",
+  "title_field": "subject",
+  "in_sidebar": true,
+  "icon": "mail",
+  "group": "System",
+  "naming": "EML-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "subject",
+      "label": "Subject",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "recipients",
+      "label": "Recipients",
+      "field_type": "text",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "cc",
+      "label": "CC",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "bcc",
+      "label": "BCC",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "from_address",
+      "label": "From Address",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "entity_name",
+      "label": "Entity Name",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "record_id",
+      "label": "Record ID",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "event_type",
+      "label": "Event Type",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "status",
+      "label": "Status",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true,
+      "options": [
+        "pending",
+        "sent",
+        "failed"
+      ]
+    },
+    {
+      "name": "error_message",
+      "label": "Error Message",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "html_body",
+      "label": "HTML Body",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "sent_at",
+      "label": "Sent At",
+      "field_type": "datetime",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "sent_by",
+      "label": "Sent By",
+      "field_type": "string",
+      "required": false
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

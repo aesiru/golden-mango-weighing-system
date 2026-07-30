@@ -1,0 +1,108 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Work Order Activity — {{ record.id or record_id }}</title>
+  {{ print_styles() }}
+</head>
+<body>
+<div class="print-container">
+
+  {{ branding_header(branding, title="Work Order Activity", subtitle=record.id or record_id) }}
+
+  <!-- Activity Details -->
+  <div class="form-section">
+    <div class="section-header"><span>Activity Details</span></div>
+    <div class="meta-grid-4" style="margin-top:8px;">
+      <div class="meta-item">
+        <span class="label">Activity ID</span>
+        <span class="value">{{ record.id or record_id }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">{{ record.workflow_state or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Work Order</span>
+        <span class="value">{{ record.work_order or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Activity Type</span>
+        <span class="value">{{ record.activity_type or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Work Item</span>
+        <span class="value">{{ record.work_item or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Work Item Type</span>
+        <span class="value">{{ record.work_item_type or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Location</span>
+        <span class="value">{{ record.location or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Position</span>
+        <span class="value">{{ record.position or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Site</span>
+        <span class="value">{{ record.site or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Department</span>
+        <span class="value">{{ record.department or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Start Date</span>
+        <span class="value">{{ record.start_date or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">End Date</span>
+        <span class="value">{{ record.end_date or '' }}</span>
+      </div>
+    </div>
+  </div>
+
+  {% if record.description %}
+  <div class="form-section">
+    <div class="section-header"><span>Description</span></div>
+    <p class="description-field">{{ record.description }}</p>
+  </div>
+  {% endif %}
+
+  <!-- Child tables (logs, labor, parts, etc.) -->
+  {% for child in children %}
+  <div class="form-section">
+    <div class="section-header"><span>{{ child.label }}</span></div>
+    {% if child.rows %}
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th style="width:28px;">#</th>
+          {% for col in child.columns %}<th>{{ col.label }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in child.rows %}
+        <tr>
+          <td class="center">{{ loop.index }}</td>
+          {% for col in child.columns %}<td>{{ row.get(col.name, '') or '' }}</td>{% endfor %}
+        </tr>
+        {% else %}
+        <tr><td colspan="{{ child.columns|length + 1 }}" style="text-align:center; color:#888; padding:8px;">No records.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="font-size:11px; color:#888; padding:4px 0;">No records.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  {{ print_footer(branding) }}
+</div>
+</body>
+</html>

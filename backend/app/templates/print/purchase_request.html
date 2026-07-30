@@ -1,0 +1,170 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Purchase Request — {{ record.id or record_id }}</title>
+    {{ print_styles() }}
+    <style>
+      .desc-bar {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        font-size: 10px;
+      }
+      .desc-bar .desc-head {
+        background: #f3f4f6;
+        font-weight: 700;
+        font-size: 9px;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-bottom: 1px solid #ccc;
+        color: #555;
+      }
+      .desc-bar .desc-val {
+        padding: 5px 8px;
+        min-height: 28px;
+        font-size: 11px;
+        white-space: pre-wrap;
+      }
+      .notes {
+        font-size: 10px;
+        border: 1px solid #ccc;
+        padding: 6px 8px;
+        margin-bottom: 14px;
+      }
+      .notes ol {
+        margin: 4px 0 0 16px;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+
+      <!-- ══ Branding Header ══ -->
+      {{ branding_header(branding, title="Purchase Request", subtitle=record.id or record_id) }}
+
+      <!-- ══ Request Details ══ -->
+      <div class="form-section">
+        <div class="section-header"><span>Request Details</span></div>
+        <div class="meta-grid-4" style="margin-top: 6px">
+          <div class="meta-item">
+            <span class="label">PR Number</span>
+            <span class="value">{{ pr_number or record.id or record_id }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Date Requested</span>
+            <span class="value">{{ pr_date or record.date_requested or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Status</span>
+            <span class="value">{{ record.workflow_state or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Priority</span>
+            <span class="value">{{ record.priority or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Requestor</span>
+            <span class="value">{{ requestor_name or record.requestor or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Department</span>
+            <span class="value">{{ requesting_department or record.department or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Site</span>
+            <span class="value">{{ record.site or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Required By</span>
+            <span class="value">{{ record.due_date or '' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Purpose / Description ══ -->
+      {% if purpose or record.pr_description %}
+      <div class="form-section">
+        <div class="desc-bar">
+          <div class="desc-head">Purpose / Description</div>
+          <div class="desc-val">{{ purpose or record.pr_description }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- ══ Line Items ══ -->
+      <div class="form-section">
+        <div class="section-header"><span>Line Items</span></div>
+        {% if line_items %}
+        {% set ns = namespace(total=0) %}
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width: 30px; text-align: center">#</th>
+              <th style="width: 20%">Item</th>
+              <th>Description</th>
+              <th style="width: 44px; text-align: center">Qty</th>
+              <th style="width: 44px; text-align: center">Unit</th>
+              <th style="width: 78px; text-align: right">Unit Price</th>
+              <th style="width: 78px; text-align: right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in line_items %}
+            {% set line_total = (item.total or '0')|replace(',', '')|float %}
+            {% set ns.total = ns.total + line_total %}
+            <tr>
+              <td class="center">{{ loop.index }}</td>
+              <td>{{ item.item_name or '' }}</td>
+              <td>{{ item.description or '' }}</td>
+              <td class="center">{{ item.qty }}</td>
+              <td class="center">{{ item.unit }}</td>
+              <td class="right">{{ item.unit_price }}</td>
+              <td class="right">{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="6" class="right" style="font-weight: 700; background: #f3f4f6">Total</td>
+              <td class="right" style="font-weight: 700; background: #f3f4f6">{{ "{:,.2f}".format(ns.total) }}</td>
+            </tr>
+            <tr>
+              <td colspan="7" style="font-style: italic; font-size: 10px; color: #888">
+                ***Nothing Follows***
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {% else %}
+        <p style="font-size: 11px; color: #888; padding: 4px 0">No line items.</p>
+        {% endif %}
+      </div>
+
+      <!-- ══ Notes ══ -->
+      <div class="notes">
+        <strong>Notes and Instructions</strong>
+        <ol>
+          <li>This is not a Purchase Order. If you need a PO, Finance will create it.</li>
+          <li>If purpose is replenishment, please CHECK if items have reached reorder point.</li>
+          <li>If from a program or project, attach the approved project summary and bill of materials.</li>
+          <li>If classified as CAPEX, attach a manager-approved memo and vendor quotation.</li>
+        </ol>
+      </div>
+
+      <!-- ══ Signatures ══ -->
+      <div class="sig-section">
+        <div class="sig-block">
+          <div class="sig-line">Prepared by</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line">Checked by</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line">Approved by</div>
+        </div>
+      </div>
+
+      {{ print_footer(branding) }}
+    </div>
+  </body>
+</html>

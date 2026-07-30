@@ -1,0 +1,296 @@
+{# _base.html — Shared print styles and branding header macro. Usage: {% from
+"_base.html" import print_styles, branding_header %} {{ print_styles() }} {{
+branding_header(branding, title="Purchase Request", subtitle=record.id) }} #} {%
+macro print_styles() %}
+<style>
+  /* ── Page setup: A4 portrait with 0.5in margins ── */
+  @page {
+    size: A4 portrait;
+    margin: 0.5in;
+  }
+  @page :first {
+    margin-top: 0.5in;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  html,
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #333;
+    margin: 0 auto;
+    padding: 0;
+    width: 7in;
+    max-width: 7in;
+  }
+
+  /* Screen preview wrapper mimics the printable area */
+  .print-container {
+    width: 7in;
+    max-width: 7in;
+    margin: 0 auto;
+    padding: 0.5in 0;
+  }
+
+  @media print {
+    html,
+    body {
+      width: auto;
+      max-width: none;
+    }
+
+    .print-container {
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  /* ── Page breaks ── */
+  .page-break-before {
+    page-break-before: always;
+    break-before: page;
+  }
+  .page-break-after {
+    page-break-after: always;
+    break-after: page;
+  }
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .form-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 10px;
+  }
+
+  /* Tables: repeat header on every page, avoid breaking rows */
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    table-layout: fixed;
+    margin-top: 6px;
+  }
+  .doc-table thead {
+    display: table-header-group;
+  }
+  .doc-table tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .doc-table th {
+    background: #f3f4f6;
+    border: 1px solid #ccc;
+    padding: 4px 5px;
+    text-align: left;
+    font-size: 9px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .doc-table td {
+    border: 1px solid #ddd;
+    padding: 4px 5px;
+    font-size: 10px;
+    word-break: break-word;
+  }
+  .doc-table td.center {
+    text-align: center;
+  }
+  .doc-table td.right {
+    text-align: right;
+  }
+
+  /* ── Branding header ── */
+  .print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #555;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .print-header .brand-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .print-header .brand-logo {
+    max-height: 48px;
+    max-width: 120px;
+    object-fit: contain;
+  }
+  .print-header .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .print-header .brand-desc {
+    font-size: 10px;
+    color: #666;
+  }
+  .print-header .doc-meta {
+    text-align: right;
+  }
+  .print-header .doc-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .print-header .doc-subtitle {
+    font-size: 12px;
+    color: #555;
+  }
+  .print-header .doc-date {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* ── Footer with page numbers ── */
+  .print-footer {
+    border-top: 2px solid #555;
+    margin-top: 16px;
+    padding-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #888;
+  }
+  .print-footer .footer-left {
+    text-align: left;
+  }
+  .print-footer .footer-right {
+    text-align: right;
+  }
+
+  /* CSS counter-based page numbers (works in Chromium/Playwright) */
+  @page {
+    @bottom-center {
+      content: 'Page ' counter(page) ' of ' counter(pages);
+      font-size: 9px;
+      color: #888;
+    }
+  }
+
+  /* ── Sections ── */
+  .section-header {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 6px;
+  }
+  .section-header span {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #555;
+  }
+
+  /* ── Meta grids ── */
+  .meta-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .meta-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .meta-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .meta-item .label {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 500;
+  }
+  .meta-item .value {
+    font-size: 11px;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  /* ── Signature blocks ── */
+  .sig-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    gap: 20px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .sig-block {
+    flex: 1;
+  }
+  .sig-line {
+    border-top: 1px solid #333;
+    margin-top: 28px;
+    padding-top: 3px;
+    font-size: 10px;
+  }
+
+  /* ── Description field ── */
+  .description-field {
+    font-size: 11px;
+    padding: 4px 0;
+    white-space: pre-wrap;
+  }
+</style>
+{% endmacro %} {% macro branding_header(branding, title, subtitle="") %}
+<div class="print-header">
+  <div class="brand-left">
+    {% if branding.logo_url %}
+    <img src="{{ branding.logo_url }}" alt="Logo" class="brand-logo" />
+    {% endif %}
+    <div>
+      <div class="brand-name">
+        {{ branding.organization_name or "EAM System" }}
+      </div>
+      {% if branding.description %}
+      <div class="brand-desc">{{ branding.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="doc-meta">
+    <div class="doc-title">{{ title }}</div>
+    {% if subtitle %}
+    <div class="doc-subtitle">{{ subtitle }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %} {% macro print_footer(branding) %}
+<div class="print-footer">
+  <span class="footer-left"
+    >{{ branding.organization_name or "EAM System" }} &nbsp;|&nbsp; Printed: {{
+    now }}</span
+  >
+  <span class="footer-right page-num"></span>
+</div>
+<script>
+  (function () {
+    /* Populate page numbers for browser/iframe preview only.
+       Playwright uses @page @bottom-center for the real PDF. */
+    document.querySelectorAll('.page-num').forEach(function (el) {
+      el.textContent = 'Page 1';
+    });
+  })();
+</script>
+{% endmacro %}

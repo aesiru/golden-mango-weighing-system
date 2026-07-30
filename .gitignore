@@ -1,0 +1,62 @@
+# ── OS ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── IDE ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+.windsurf/
+.agents/
+
+# ── Environment / secrets ───────────────────────────────────
+# NEVER commit these — they contain DB passwords, secret keys
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+.venv311/
+venv/
+ENV/
+*.egg-info/
+
+# ── Node / Nuxt ─────────────────────────────────────────────
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ── Database ─────────────────────────────────────────────────
+# SQLite files are local dev only — not for production commits
+*.sqlite3
+*.db
+backend/backups/
+
+# ── Uploads (runtime generated, not source code) ─────────────
+backend/uploads/
+
+# ── Schema / build cache ──────────────────────────────────────
+.schema_cache/
+backend/app/meta/__pycache__/
+
+# ── Deployment ───────────────────────────────────────────────
+.vercel

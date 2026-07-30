@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ subject }}</title>
+
+    <style>
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        background-color: #f4f4f5;
+        color: #18181b;
+        line-height: 1.6;
+      }
+
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 32px 16px;
+      }
+
+      .email-card {
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e4e4e7;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+      }
+
+      .email-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #e4e4e7;
+        background: #fafafa;
+      }
+
+      .email-header h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .email-header .subtitle {
+        margin-top: 6px;
+        font-size: 14px;
+        color: #71717a;
+      }
+
+      .email-body {
+        padding: 28px;
+      }
+
+      .email-body p {
+        margin: 0 0 16px;
+        font-size: 15px;
+        color: #3f3f46;
+      }
+
+      .record-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 14px;
+      }
+
+      .record-table tr {
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .record-table th {
+        text-align: left;
+        padding: 10px 0;
+        color: #71717a;
+        font-weight: 500;
+        width: 35%;
+      }
+
+      .record-table td {
+        padding: 10px 0;
+        color: #18181b;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        border: 1px solid #e4e4e7;
+        background: #fafafa;
+        color: #27272a;
+      }
+
+      .badge-success {
+        background: #ecfdf5;
+        color: #065f46;
+        border-color: #a7f3d0;
+      }
+
+      .badge-warning {
+        background: #fffbeb;
+        color: #92400e;
+        border-color: #fde68a;
+      }
+
+      .badge-info {
+        background: #eff6ff;
+        color: #1e3a8a;
+        border-color: #bfdbfe;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #18181b;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid #18181b;
+
+        /* Email-safe overrides */
+        mso-line-height-rule: exactly;
+      }
+
+      .btn:visited,
+      .btn:active,
+      .btn:link {
+        color: #ffffff !important;
+        text-decoration: none !important;
+      }
+
+      .email-footer {
+        padding: 20px 28px;
+        border-top: 1px solid #e4e4e7;
+        font-size: 12px;
+        color: #71717a;
+        text-align: center;
+        background: #fafafa;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="email-wrapper">
+      <div class="email-card">
+        {% block header %}
+        <div class="email-header">
+          <h1>{{ subject }}</h1>
+          {% if subtitle %}
+          <div class="subtitle">{{ subtitle }}</div>
+          {% endif %}
+        </div>
+        {% endblock %}
+
+        <div class="email-body">{% block content %}{% endblock %}</div>
+
+        <div class="email-footer">
+          {% block footer %}
+          <p style="margin: 0">
+            <small>
+              This is an automated notification from
+              <strong>EAM System</strong>. Please do not reply.
+            </small>
+          </p>
+
+          {# {% if action_url %}
+          <p style="margin-top: 14px">
+            <a href="{{ action_url }}" class="btn"> View {{ entity_label }} </a>
+          </p>
+          {% endif %} #} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

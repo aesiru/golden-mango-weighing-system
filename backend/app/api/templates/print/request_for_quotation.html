@@ -1,0 +1,112 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request for Quotation — {{ record.id or record_id }}</title>
+  {{ print_styles() }}
+  <style>
+    .instructions-section { margin: 14px 0; font-size: 11px; }
+    .instructions-section strong { display: block; margin-bottom: 4px; }
+    .instructions-section ul { margin-left: 18px; }
+  </style>
+</head>
+<body>
+<div class="print-container">
+
+  {{ branding_header(branding, title="Request for Quotation", subtitle=record.id or record_id) }}
+
+  <!-- RFQ Details -->
+  <div class="form-section">
+    <div class="meta-grid-3" style="margin-top:8px;">
+      <div class="meta-item">
+        <span class="label">RFQ No.</span>
+        <span class="value">{{ record.id or record_id }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Date Issued</span>
+        <span class="value">{{ record.transaction_date or record.created_at or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Due Date</span>
+        <span class="value">{{ record.due_date or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">{{ record.workflow_state or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Supplier</span>
+        <span class="value">{{ record.supplier or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Purchase Request</span>
+        <span class="value">{{ record.purchase_request or '' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Line Items -->
+  {% for child in children %}
+  <div class="form-section">
+    <div class="section-header"><span>{{ child.label }}</span></div>
+    {% if child.rows %}
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th style="width:28px;">#</th>
+          {% for col in child.columns %}<th>{{ col.label }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in child.rows %}
+        <tr>
+          <td class="center">{{ loop.index }}</td>
+          {% for col in child.columns %}<td>{{ row.get(col.name, '') or '' }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="font-size:11px; color:#888; padding:4px 0;">No items.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <!-- Instructions -->
+  <div class="instructions-section">
+    <strong>Instructions to Vendor:</strong>
+    <ul>
+      <li>Please submit your quotation by <strong>{{ record.due_date or '___________' }}</strong>.</li>
+      <li>Prices must include all taxes, delivery, and other charges.</li>
+      <li>State delivery lead time and warranty (if applicable).</li>
+    </ul>
+  </div>
+
+  <!-- Vendor Response placeholder -->
+  <div class="form-section">
+    <div class="section-header"><span>Vendor Response</span></div>
+    <div class="meta-grid-3" style="margin-top:8px;">
+      <div class="meta-item">
+        <span class="label">Company Name</span>
+        <span class="value">{{ record.supplier or '' }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Contact Person</span>
+        <span class="value">&nbsp;</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Phone / Email</span>
+        <span class="value">&nbsp;</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px; font-size:11px;">
+    Authorized Signature &amp; Date: ____________________________
+  </div>
+
+  {{ print_footer(branding) }}
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "crate_class",
+  "label": "Crate Class",
+  "module": "warehouse",
+  "table_name": "crate_class",
+  "title_field": "name",
+  "in_sidebar": 1,
+  "fields": [
+    {
+      "name": "name",
+      "field_type": "string"
+    },
+    {
+      "name": "min_weight",
+      "field_type": "float"
+    },
+    {
+      "name": "max_weight",
+      "field_type": "float"
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ]
+  }
+}

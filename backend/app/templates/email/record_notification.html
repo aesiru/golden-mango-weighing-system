@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>{{ greeting }}</p>
+
+<p>{{ message }}</p>
+
+{% if record_fields %}
+<table class="record-table">
+  {% for field in record_fields %}
+  <tr>
+    <th>{{ field.label }}</th>
+    <td>
+      {% if field.name == 'workflow_state' or field.name == 'status' %}
+        <span class="badge badge-info">{{ field.value }}</span>
+      {% else %}
+        {{ field.value if field.value is not none and field.value != '' else '—' }}
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+{% if action_url %}
+<p style="text-align: center; margin-top: 20px;">
+  <a href="{{ action_url }}" class="btn">View {{ entity_label }}</a>
+</p>
+{% endif %}
+{% endblock %}

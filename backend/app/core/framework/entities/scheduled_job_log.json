@@ -1,0 +1,128 @@
+{
+  "name": "scheduled_job_log",
+  "label": "Scheduled Job Log",
+  "module": "core",
+  "table_name": "core_scheduled_job_log",
+  "title_field": "job_name",
+  "in_sidebar": true,
+  "icon": "clock",
+  "group": "System",
+  "naming": "SJL-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "job_id",
+      "label": "Job ID",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "job_name",
+      "label": "Job Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "status",
+      "label": "Status",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true,
+      "options": [
+        "running",
+        "success",
+        "failed",
+        "skipped"
+      ]
+    },
+    {
+      "name": "started_at",
+      "label": "Started At",
+      "field_type": "datetime",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "completed_at",
+      "label": "Completed At",
+      "field_type": "datetime",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "duration_seconds",
+      "label": "Duration (seconds)",
+      "field_type": "float",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "records_created",
+      "label": "Records Created",
+      "field_type": "int",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "records_updated",
+      "label": "Records Updated",
+      "field_type": "int",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "error_message",
+      "label": "Error Message",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "error_traceback",
+      "label": "Error Traceback",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "details",
+      "label": "Details",
+      "field_type": "text",
+      "required": false
+    },
+    {
+      "name": "trigger_type",
+      "label": "Trigger Type",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true,
+      "options": [
+        "cron",
+        "manual",
+        "event"
+      ]
+    },
+    {
+      "name": "cron_expression",
+      "label": "Cron Expression",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

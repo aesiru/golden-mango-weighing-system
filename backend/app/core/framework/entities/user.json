@@ -1,0 +1,137 @@
+{
+  "name": "user",
+  "label": "User",
+  "module": "core",
+  "table_name": "core_users",
+  "title_field": "full_name",
+  "in_sidebar": true,
+  "icon": "users",
+  "group": "Authentication",
+  "search": true,
+  "naming": "USR-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "username",
+      "label": "Username",
+      "field_type": "string",
+      "required": true,
+      "unique": true,
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "field_type": "string",
+      "required": true,
+      "unique": true,
+      "in_list_view": true
+    },
+    {
+      "name": "full_name",
+      "label": "Full Name",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "first_name",
+      "label": "First Name",
+      "field_type": "string"
+    },
+    {
+      "name": "last_name",
+      "label": "Last Name",
+      "field_type": "string"
+    },
+    {
+      "name": "contact_number",
+      "label": "Contact Number",
+      "field_type": "string"
+    },
+    {
+      "name": "department",
+      "label": "Department",
+      "field_type": "string",
+      "readonly": true,
+      "hidden": true
+    },
+    {
+      "name": "site",
+      "label": "Site",
+      "field_type": "string",
+      "readonly": true,
+      "hidden": true
+    },
+    {
+      "name": "employee_id",
+      "label": "Employee ID",
+      "field_type": "string",
+      "readonly": true
+    },
+    {
+      "name": "is_active",
+      "label": "Active",
+      "field_type": "boolean",
+      "required": true,
+      "default": true,
+      "in_list_view": true
+    },
+    {
+      "name": "is_superuser",
+      "label": "Superuser",
+      "field_type": "boolean",
+      "required": true,
+      "default": false,
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "updated_at",
+      "label": "Updated At",
+      "field_type": "datetime",
+      "readonly": true
+    }
+  ],
+  "links": [
+    {
+      "entity": "role",
+      "fk_field": "user_id",
+      "label": "Roles",
+      "link_table": "core_user_roles"
+    }
+  ],
+  "attachment_config": {
+    "allow_attachments": true,
+    "max_attachments": 1,
+    "max_file_size_mb": 5,
+    "allowed_extensions": [
+      "jpg",
+      "jpeg",
+      "png",
+      "gif",
+      "webp"
+    ]
+  },
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read",
+      "create",
+      "update"
+    ],
+    "User": [
+      "read"
+    ]
+  }
+}

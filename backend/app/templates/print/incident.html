@@ -1,0 +1,347 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Incident — {{ record.id or record_id }}</title>
+    {{ print_styles() }}
+    <style>
+      html,
+      body {
+        font-size: 11px;
+      }
+
+      .form-section {
+        margin-bottom: 7px;
+      }
+      .section-header {
+        margin-bottom: 3px;
+      }
+      .section-header span {
+        font-size: 9px;
+      }
+
+      .meta-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px 10px;
+        margin-top: 4px;
+      }
+      .meta-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px 10px;
+        margin-top: 4px;
+      }
+      .meta-item .label {
+        font-size: 8px;
+        text-transform: uppercase;
+        color: #888;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+      .meta-item .value {
+        font-size: 10px;
+        font-weight: 600;
+        word-break: break-word;
+        margin-top: 1px;
+      }
+
+      .severity-badge {
+        display: inline-block;
+        padding: 1px 6px;
+        border-radius: 2px;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .severity-low {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+      }
+      .severity-medium {
+        background: #fef9c3;
+        color: #854d0e;
+        border: 1px solid #fde68a;
+      }
+      .severity-high {
+        background: #ffedd5;
+        color: #9a3412;
+        border: 1px solid #fdba74;
+      }
+      .severity-critical {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+      }
+
+      .description-field {
+        font-size: 10.5px;
+        line-height: 1.6;
+        padding: 3px 0 2px;
+        white-space: pre-wrap;
+        color: #222;
+        margin: 0;
+      }
+
+      .doc-table {
+        font-size: 9.5px;
+        margin-top: 4px;
+      }
+      .doc-table th {
+        font-size: 8px;
+        padding: 3px 5px;
+      }
+      .doc-table td {
+        padding: 3px 5px;
+        font-size: 9.5px;
+      }
+      .doc-table tr:nth-child(even) td {
+        background: #fafafa;
+      }
+
+      .thin-rule {
+        border: none;
+        border-top: 1px solid #e5e7eb;
+        margin: 6px 0;
+      }
+
+      .sig-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0 16px;
+        margin-top: 18px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .sig-block .sig-line {
+        border-top: 1px solid #333;
+        margin-top: 22px;
+        padding-top: 3px;
+        font-size: 9px;
+        color: #444;
+      }
+
+      .no-break {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .photos-section {
+        margin: 8px 0;
+        page-break-inside: avoid;
+        page-break-before: avoid;
+      }
+      .photos-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 6px;
+      }
+      .photo-item {
+        text-align: center;
+        page-break-inside: avoid;
+      }
+      .photo-item img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        background: #fafafa;
+      }
+      .photo-caption {
+        margin-top: 4px;
+        font-size: 8px;
+        color: #666;
+        font-style: italic;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+      {{ branding_header(branding, title="Incident Report", subtitle=record.id
+      or record_id) }}
+
+      <!-- Incident Summary row -->
+      <div class="form-section no-break">
+        <div class="meta-grid-3" style="margin-top: 6px">
+          <div class="meta-item">
+            <span class="label">Incident ID</span>
+            <span class="value">{{ record.id or record_id }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Title</span>
+            <span class="value">{{ record.title or '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Reported By</span>
+            <span class="value">{{ incident.reported_by or record.reported_by or record.owner or '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="thin-rule" />
+
+      <!-- 1. Incident Details -->
+      <div class="form-section no-break">
+        <div class="section-header"><span>1. Incident Details</span></div>
+        <div class="meta-grid-3">
+          <div class="meta-item">
+            <span class="label">Date Reported</span>
+            <span class="value"
+              >{{ record.date_reported or record.created_at or '—' }}</span
+            >
+          </div>
+          <div class="meta-item">
+            <span class="label">Date / Time of Incident</span>
+            <span class="value"
+              >{{ record.incident_datetime or record.incident_date or '—'
+              }}</span
+            >
+          </div>
+          <div class="meta-item">
+            <span class="label">Location</span>
+            <span class="value">{{ incident.location or record.location or '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Site</span>
+            <span class="value">{{ incident.site or record.site or '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Department</span>
+            <span class="value">{{ incident.department or record.department or '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Incident Type</span>
+            <span class="value">{{ record.incident_type or '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Severity</span>
+            <span class="value">
+              {% if record.severity %} {% set sev = record.severity | lower %}
+              <span class="severity-badge severity-{{ sev }}"
+                >{{ record.severity }}</span
+              >
+              {% else %}—{% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Incident Description -->
+      {% if record.description %}
+      <div class="form-section">
+        <div class="section-header"><span>2. Incident Description</span></div>
+        <p class="description-field">{{ record.description }}</p>
+      </div>
+      {% endif %}
+
+      <!-- 3+. Child tables (People Involved, Corrective Actions, etc.) -->
+      {% for child in children %}
+      <div class="form-section">
+        <div class="section-header">
+          <span>{{ loop.index + 3 }}. {{ child.label }}</span>
+        </div>
+        {% if child.rows %}
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width: 22px">#</th>
+              {% for col in child.columns %}
+              <th>{{ col.label }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in child.rows %}
+            <tr>
+              <td class="center">{{ loop.index }}</td>
+              {% for col in child.columns %}
+              <td>{{ row.get(col.name, '') or '—' }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+            <tr>
+              <td
+                colspan="{{ child.columns | length + 1 }}"
+                style="font-style: italic; font-size: 9px; color: #aaa"
+              >
+                *NOTHING FOLLOWS*
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {% else %}
+        <p style="font-size: 10px; color: #aaa; padding: 2px 0">No records.</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <!-- Asset (conditional) -->
+      {% if record.asset %}
+      <div class="form-section no-break">
+        <div class="section-header"><span>Asset Involved</span></div>
+        <div class="meta-grid-2">
+          <div class="meta-item">
+            <span class="label">Asset</span>
+            <span class="value">{{ incident.asset or record.asset }}</span>
+          </div>
+          {% if record.asset_tag %}
+          <div class="meta-item">
+            <span class="label">Asset Tag</span>
+            <span class="value">{{ record.asset_tag }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Immediate Actions -->
+      {% if record.immediate_action_taken %}
+      <div class="form-section">
+        <div class="section-header"><span>Immediate Actions Taken</span></div>
+        <p class="description-field">{{ record.immediate_action_taken }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Preventive Actions -->
+      {% if record.preventive_actions %}
+      <div class="form-section">
+        <div class="section-header"><span>Preventive Actions</span></div>
+        <p class="description-field">{{ record.preventive_actions }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Photos -->
+      {% if photos %}
+      <div class="form-section photos-section">
+        <div class="section-header"><span>Photos</span></div>
+        <div class="photos-grid">
+          {% for photo in photos %}
+          <div class="photo-item">
+            <img
+              src="{% if photo.base64_data %}data:{{ photo.mime_type }};base64,{{ photo.base64_data }}{% else %}/api/entity/incident/{{ record_id }}/attachments/{{ photo.id }}/download{% endif %}"
+              alt="{{ photo.original_name or photo.file_name }}"
+            />
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Signatures -->
+      <div class="sig-section">
+        <div class="sig-block"><div class="sig-line">Prepared by:</div></div>
+        <div class="sig-block">
+          <div class="sig-line">Investigated by:</div>
+        </div>
+        <div class="sig-block"><div class="sig-line">Approved by:</div></div>
+      </div>
+
+      {{ print_footer(branding) }}
+    </div>
+  </body>
+</html>

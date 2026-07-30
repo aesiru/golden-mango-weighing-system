@@ -1,0 +1,54 @@
+{
+  "name": "workflow_action",
+  "label": "Workflow Action",
+  "module": "core",
+  "table_name": "core_workflow_actions",
+  "title_field": "label",
+  "in_sidebar": false,
+  "icon": "play",
+  "group": "Workflow",
+  "search_fields": [
+    "label",
+    "slug"
+  ],
+  "naming": "WFA-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "label",
+      "label": "Label",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "slug",
+      "label": "Slug",
+      "field_type": "string",
+      "required": false,
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "updated_at",
+      "label": "Updated At",
+      "field_type": "datetime",
+      "readonly": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

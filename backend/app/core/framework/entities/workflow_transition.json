@@ -1,0 +1,70 @@
+{
+  "name": "workflow_transition",
+  "label": "Workflow Transition",
+  "module": "core",
+  "table_name": "core_workflow_transitions",
+  "title_field": "action_id",
+  "in_sidebar": false,
+  "icon": "arrow-right",
+  "group": "Workflow",
+  "naming": "WFT-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "workflow_id",
+      "label": "Workflow",
+      "field_type": "link",
+      "link_entity": "workflow",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "from_state_id",
+      "label": "From State",
+      "field_type": "link",
+      "link_entity": "workflow_state",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "action_id",
+      "label": "Action",
+      "field_type": "link",
+      "link_entity": "workflow_action",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "to_state_id",
+      "label": "To State",
+      "field_type": "link",
+      "link_entity": "workflow_state",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "allowed_roles",
+      "label": "Allowed Roles",
+      "field_type": "text",
+      "required": false,
+      "in_list_view": true,
+      "placeholder": "JSON array of role names, e.g. [\"PurchaseApprover\",\"AssetManager\"]"
+    },
+    {
+      "name": "sort_order",
+      "label": "Sort Order",
+      "field_type": "int",
+      "required": true,
+      "default": 0,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}

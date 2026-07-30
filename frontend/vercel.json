@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".output",
+  "installCommand": "pnpm install",
+  "framework": "nuxtjs",
+  "env": {
+    "NODE_VERSION": "20"
+  }
+}

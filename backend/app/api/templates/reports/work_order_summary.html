@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ report_title }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 12px;
+        color: #1f2937;
+        line-height: 1.5;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .header {
+        border-bottom: 2px solid #3730a3;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        font-size: 20px;
+        color: #3730a3;
+      }
+      .header p {
+        font-size: 11px;
+        color: #6b7280;
+        margin-top: 4px;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .section-header {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+        margin-bottom: 10px;
+      }
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .meta-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 10px;
+        text-align: center;
+      }
+      .meta-card .label {
+        display: block;
+        font-size: 10px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .meta-card .value {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        margin-top: 2px;
+      }
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .filter-item {
+        background: #eef2ff;
+        border-radius: 4px;
+        padding: 6px 10px;
+      }
+      .filter-item .label {
+        font-size: 10px;
+        color: #6b7280;
+      }
+      .filter-item .value {
+        font-size: 12px;
+        font-weight: 500;
+        color: #3730a3;
+      }
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .chart-container {
+        position: relative;
+        height: 220px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      th {
+        background: #f3f4f6;
+        color: #374151;
+        font-weight: 600;
+        text-align: left;
+        padding: 6px 8px;
+        border-bottom: 1px solid #d1d5db;
+      }
+      td {
+        padding: 5px 8px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      tr:nth-child(even) {
+        background: #f9fafb;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 500;
+      }
+      .activity-block {
+        margin-top: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .activity-header {
+        background: #f9fafb;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .activity-table th,
+      .activity-table td {
+        font-size: 10px;
+      }
+      .activity-empty {
+        padding: 10px;
+        color: #9ca3af;
+        font-size: 10px;
+        text-align: center;
+      }
+      .footer {
+        margin-top: 24px;
+        padding-top: 12px;
+        border-top: 1px solid #e5e7eb;
+        text-align: center;
+        font-size: 10px;
+        color: #9ca3af;
+      }
+      @media print {
+        .container {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{ report_title }}</h1>
+        <p>{{ report_description }}</p>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Report Filters</div>
+        <div class="filter-grid">
+          <div class="filter-item">
+            <span class="label">From</span>
+            <span class="value">{{ filters.from_date or 'Last 30 days' }}</span>
+          </div>
+          <div class="filter-item">
+            <span class="label">To</span>
+            <span class="value">{{ filters.to_date or 'Today' }}</span>
+          </div>
+          <div class="filter-item">
+            <span class="label">Generated</span>
+            <span class="value">{{ generated_at }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Summary</div>
+        <div class="meta-grid">
+          <div class="meta-card">
+            <span class="label">Total Work Orders</span>
+            <span class="value">{{ summary.total or 0 }}</span>
+          </div>
+          {% for status, count in summary.by_status.items() %}
+          <div class="meta-card">
+            <span class="label">{{ status }}</span>
+            <span class="value">{{ count }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Charts</div>
+        <div class="chart-grid">
+          <div class="chart-container"><canvas id="statusChart"></canvas></div>
+          <div class="chart-container">
+            <canvas id="priorityChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Work Orders</div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Site</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for wo in work_orders %}
+            <tr>
+              <td>{{ wo.id }}</td>
+              <td>{{ wo.work_order_type or '-' }}</td>
+              <td>{{ wo.description or '-' }}</td>
+              <td>{{ wo.site_name or wo.site or '-' }}</td>
+              <td>{{ wo.department_name or wo.department or '-' }}</td>
+              <td>
+                <span class="badge" style="background: #eef2ff"
+                  >{{ wo.workflow_state or 'Draft' }}</span
+                >
+              </td>
+              <td>{{ wo.priority or '-' }}</td>
+              <td>{{ wo.due_date or '-' }}</td>
+            </tr>
+            <tr>
+              <td colspan="8" style="padding: 0 0 12px 0; background: #fff">
+                <div class="activity-block">
+                  <div class="activity-header">
+                    Work Order Activities for {{ wo.id }}
+                  </div>
+                  {% if wo.activities %}
+                  <table class="activity-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Work Item Type</th>
+                        <th>Work Item</th>
+                        <th>Activity Type</th>
+                        <th>Assigned To</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for activity in wo.activities %}
+                      <tr>
+                        <td>{{ activity.id }}</td>
+                        <td>{{ activity.description or '-' }}</td>
+                        <td>
+                          <span class="badge" style="background: #ecfeff"
+                            >{{ activity.workflow_state or '-' }}</span
+                          >
+                        </td>
+                        <td>{{ activity.work_item_type or '-' }}</td>
+                        <td>
+                          {{ activity.asset_name or activity.work_item or '-' }}
+                        </td>
+                        <td>
+                          {{ activity.activity_type_name or
+                          activity.activity_type or '-' }}
+                        </td>
+                        <td>{{ activity.assigned_to or '-' }}</td>
+                        <td>{{ activity.start_date or '-' }}</td>
+                        <td>{{ activity.end_date or '-' }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <div class="activity-empty">
+                    No work order activities found.
+                  </div>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %} {% if not work_orders %}
+            <tr>
+              <td
+                colspan="8"
+                style="text-align: center; color: #9ca3af; padding: 20px"
+              >
+                No work orders found for the selected filters.
+              </td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <p>Generated on {{ generated_at }} &bull; EAM System</p>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        try {
+          var statusData = {{ summary.by_status | tojson }};
+          var priorityData = {{ summary.by_priority | tojson }};
+          var colors = ['#3b82f6','#22c55e','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+
+          if (document.getElementById('statusChart') && Object.keys(statusData).length) {
+            new Chart(document.getElementById('statusChart').getContext('2d'), {
+              type: 'doughnut',
+              data: { labels: Object.keys(statusData), datasets: [{ data: Object.values(statusData), backgroundColor: colors }] },
+              options: { animation: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 9 } } }, title: { display: true, text: 'By Status', font: { size: 12 } } }, responsive: true, maintainAspectRatio: false }
+            });
+          }
+          if (document.getElementById('priorityChart') && Object.keys(priorityData).length) {
+            new Chart(document.getElementById('priorityChart').getContext('2d'), {
+              type: 'bar',
+              data: { labels: Object.keys(priorityData), datasets: [{ label: 'Count', data: Object.values(priorityData), backgroundColor: colors }] },
+              options: { animation: false, plugins: { legend: { display: false }, title: { display: true, text: 'By Priority', font: { size: 12 } } }, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+          }
+          window.renderReady = true;
+        } catch(e) { console.error('Chart error:', e); window.renderReady = true; }
+      })();
+    </script>
+  </body>
+</html>

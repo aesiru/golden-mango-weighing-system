@@ -1,0 +1,87 @@
+{
+  "name": "notification_subscription",
+  "label": "Notification Subscription",
+  "module": "core",
+  "table_name": "core_notification_subscription",
+  "title_field": "recipient_email",
+  "in_sidebar": false,
+  "icon": "bell",
+  "group": "System",
+  "naming": "NS-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "user_id",
+      "label": "User",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "entity_type",
+      "label": "Entity Type",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "entity_id",
+      "label": "Entity ID",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "event",
+      "label": "Event",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "recipient_email",
+      "label": "Recipient Email",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "is_active",
+      "label": "Active",
+      "field_type": "boolean",
+      "required": false,
+      "in_list_view": true
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "updated_at",
+      "label": "Updated At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read",
+      "create",
+      "update",
+      "delete"
+    ],
+    "User": [
+      "read",
+      "create",
+      "update",
+      "delete"
+    ]
+  }
+}

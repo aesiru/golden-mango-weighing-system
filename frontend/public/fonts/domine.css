@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Domine';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/domine/v25/L0xhDFMnlVwD4h3Lt9JWnbX3jG-2X3LAI10.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Domine';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/domine/v25/L0xhDFMnlVwD4h3Lt9JWnbX3jG-2X5XHI10.ttf) format('truetype');
+}

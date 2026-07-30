@@ -1,0 +1,312 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Work Order — {{ work_order.id }}</title>
+    {{ print_styles() }}
+    <style>
+      .section-header {
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        color: #374151;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 4px;
+        margin-bottom: 12px;
+      }
+      .activity-section {
+        border: 1px solid #e5e7eb;
+        margin-bottom: 20px;
+        background: #ffffff;
+      }
+      .activity-header {
+        background: #f9fafb;
+        padding: 8px 12px;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+      }
+      .activity-body {
+        padding: 12px;
+      }
+      .subsection-title {
+        font-weight: 600;
+        font-size: 12px;
+        color: #4b5563;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+      .subsection-title:first-child {
+        margin-top: 0;
+      }
+      .compact-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10px;
+        margin-bottom: 12px;
+      }
+      .compact-table th {
+        background: #f3f4f6;
+        padding: 6px 8px;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #d1d5db;
+      }
+      .compact-table td {
+        padding: 6px 8px;
+        border: 1px solid #e5e7eb;
+      }
+      .compact-table td.center {
+        text-align: center;
+      }
+      .compact-table td.right {
+        text-align: right;
+      }
+      .no-records {
+        font-style: italic;
+        color: #6b7280;
+        font-size: 10px;
+        padding: 8px;
+      }
+      .activity-meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 12px;
+        font-size: 11px;
+      }
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+      }
+      .meta-label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 9px;
+        text-transform: uppercase;
+      }
+      .meta-value {
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+      {{ branding_header(branding, title="Work Order", subtitle=work_order.id)
+      }}
+
+      <!-- Work Order Header -->
+      <div class="form-section">
+        <div class="section-header">Work Order Details</div>
+        <div class="meta-grid-4" style="margin-top: 8px">
+          <div class="meta-item">
+            <span class="label">Work Order</span>
+            <span class="value">{{ work_order.id }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Type</span>
+            <span class="value">{{ work_order.type or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Status</span>
+            <span class="value">{{ work_order.workflow_state or '' }}</span>
+          </div>
+          <div class="meta-item" style="grid-column: span 4">
+            <span class="label">Priority</span>
+            <span class="value"
+              >{{ work_order.priority_with_description or '' }}</span
+            >
+          </div>
+          <div class="meta-item">
+            <span class="label">Due Date</span>
+            <span class="value">{{ work_order.due_date or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Site</span>
+            <span class="value">{{ work_order.site or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Department</span>
+            <span class="value">{{ work_order.department or '' }}</span>
+          </div>
+          <div class="meta-item" style="grid-column: span 4">
+            <span class="label">Work Order Description</span>
+            <span class="value">{{ work_order.description or '' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header">ACTIVITIES</div>
+
+      <!-- Work Order Activities -->
+      {% for activity in activities %}
+      <div class="activity-section">
+        <div class="activity-header">
+          {% if activity.description %} {{ activity.description }} {% else %}
+          Activity {{ loop.index }} - No Description {% endif %} {% if
+          activity.workflow_state %}<span
+            style="float: right; font-weight: normal; color: #6b7280"
+            >({{ activity.workflow_state }})</span
+          >{% endif %}
+        </div>
+        <div class="activity-body">
+          <!-- Activity Details -->
+          <div class="activity-meta">
+            <div class="meta-item">
+              <span class="meta-label">Activity Type</span>
+              <span class="meta-value">{{ activity.activity_type or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Work Item Type</span>
+              <span class="meta-value"
+                >{{ activity.work_item_type or '' }}</span
+              >
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Asset</span>
+              <span class="meta-value">{{ activity.asset or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Assigned To</span>
+              <span class="meta-value">{{ activity.assigned_to or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Location</span>
+              <span class="meta-value">{{ activity.location or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Site</span>
+              <span class="meta-value">{{ activity.site or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Department</span>
+              <span class="meta-value">{{ activity.department or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Start Date</span>
+              <span class="meta-value">{{ activity.start_date or '' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">End Date</span>
+              <span class="meta-value">{{ activity.end_date or '' }}</span>
+            </div>
+          </div>
+
+          <!-- Labor Details -->
+          {% if activity.labor %}
+          <div class="subsection-title">
+            Labor Details ({{ activity.total_labor_hours }} hours)
+          </div>
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Trade</th>
+                <th>Laborer</th>
+                <th class="center">Lead</th>
+                <th>Start</th>
+                <th>End</th>
+                <th class="right">Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for labor in activity.labor %}
+              <tr>
+                <td>{{ labor.trade or '' }}</td>
+                <td>{{ labor.laborer or '' }}</td>
+                <td class="center">{{ labor.lead }}</td>
+                <td>{{ labor.start or '' }}</td>
+                <td>{{ labor.end or '' }}</td>
+                <td class="right">{{ labor.hours }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="subsection-title">Labor Details</div>
+          <p class="no-records">No labor records</p>
+          {% endif %}
+
+          <!-- Parts Details -->
+          {% if activity.parts %}
+          <div class="subsection-title">
+            Parts Details ({{ activity.parts_count }} items)
+          </div>
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>UoM</th>
+                <th>Date Required</th>
+                <th class="right">Qty Rqd</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for part in activity.parts %}
+              <tr>
+                <td>{{ part.item or '' }}</td>
+                <td>{{ part.uom or '' }}</td>
+                <td>{{ part.date_required or '' }}</td>
+                <td class="right">{{ part.qty_required }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="subsection-title">Parts Details</div>
+          <p class="no-records">No parts records</p>
+          {% endif %}
+
+          <!-- Equipment Details -->
+          {% if activity.equipment %}
+          <div class="subsection-title">
+            Equipment Details ({{ activity.total_equipment_hours }} hours)
+          </div>
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Equipment</th>
+                <th>Item</th>
+                <th>Start</th>
+                <th>End</th>
+                <th class="right">Hours Used</th>
+                <th class="right">Est. Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for equipment in activity.equipment %}
+              <tr>
+                <td>{{ equipment.equipment or '' }}</td>
+                <td>{{ equipment.item or '' }}</td>
+                <td>{{ equipment.start or '' }}</td>
+                <td>{{ equipment.end or '' }}</td>
+                <td class="right">{{ equipment.hours }}</td>
+                <td class="right">{{ equipment.est_hours }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="subsection-title">Equipment Details</div>
+          <p class="no-records">No equipment records</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %} {% if not activities %}
+      <div class="form-section">
+        <div class="section-header">Activities</div>
+        <p class="no-records">No work order activities found</p>
+      </div>
+      {% endif %}
+
+      <!-- Signatures -->
+      <div class="sig-section" style="margin-top: 20px">
+        <div class="sig-block"><div class="sig-line">Requested by:</div></div>
+        <div class="sig-block"><div class="sig-line">Approved by:</div></div>
+        <div class="sig-block"><div class="sig-line">Completed by:</div></div>
+      </div>
+
+      {{ print_footer(branding) }}
+    </div>
+  </body>
+</html>

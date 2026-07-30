@@ -1,0 +1,22 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+openpyxl
+alembic
+aiosqlite
+greenlet
+python-socketio
+slowapi
+jinja2
+# playwright>=1.50.0
+email-validator
+# PostgreSQL support
+asyncpg
+psycopg2-binary
+apscheduler
+aiosmtplib

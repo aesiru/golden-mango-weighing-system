@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ report_title }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; color: #1f2937; line-height: 1.5; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .header { border-bottom: 2px solid #3730a3; padding-bottom: 12px; margin-bottom: 20px; }
+      .header h1 { font-size: 20px; color: #3730a3; }
+      .header p { font-size: 11px; color: #6b7280; margin-top: 4px; }
+      .section { margin-bottom: 20px; }
+      .section-header { font-size: 13px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; margin-bottom: 10px; }
+      .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px; }
+      .meta-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; text-align: center; }
+      .meta-card .label { display: block; font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+      .meta-card .value { display: block; font-size: 20px; font-weight: 700; color: #111827; margin-top: 2px; }
+      .chart-container { position: relative; height: 280px; margin-top: 8px; }
+      table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      th { background: #f3f4f6; color: #374151; font-weight: 600; text-align: left; padding: 6px 8px; border-bottom: 1px solid #d1d5db; }
+      td { padding: 5px 8px; border-bottom: 1px solid #e5e7eb; }
+      tr:nth-child(even) { background: #f9fafb; }
+      .text-right { text-align: right; }
+      .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 10px; color: #9ca3af; }
+      @media print { .container { padding: 12px; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{ report_title }}</h1>
+        <p>{{ report_description }}</p>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Summary &mdash; FY {{ summary.fiscal_year }}</div>
+        <div class="meta-grid">
+          <div class="meta-card"><span class="label">Total Budget</span><span class="value">{{ "{:,.0f}".format(summary.total_budget) }}</span></div>
+          <div class="meta-card"><span class="label">Total Actual</span><span class="value">{{ "{:,.0f}".format(summary.total_actual) }}</span></div>
+          <div class="meta-card"><span class="label">Variance</span><span class="value" style="color:{% if summary.variance >= 0 %}#22c55e{% else %}#ef4444{% endif %};">{{ "{:,.0f}".format(summary.variance) }}</span></div>
+          <div class="meta-card"><span class="label">Cost Codes</span><span class="value">{{ summary.budget_count }}</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Budget vs Actual by Cost Code</div>
+        <div class="chart-container"><canvas id="budgetChart"></canvas></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">Details</div>
+        <table>
+          <thead>
+            <tr><th>Cost Code</th><th>Description</th><th class="text-right">Budgeted</th><th class="text-right">Actual</th><th class="text-right">Variance</th><th class="text-right">%</th></tr>
+          </thead>
+          <tbody>
+            {% for item in budget_items %}
+            <tr>
+              <td>{{ item.cost_code }}</td>
+              <td>{{ item.description or '-' }}</td>
+              <td class="text-right">{{ "{:,.2f}".format(item.budgeted) }}</td>
+              <td class="text-right">{{ "{:,.2f}".format(item.actual) }}</td>
+              <td class="text-right" style="color:{% if item.variance >= 0 %}#22c55e{% else %}#ef4444{% endif %};">{{ "{:,.2f}".format(item.variance) }}</td>
+              <td class="text-right">{{ "{:.1f}".format(item.variance_pct) }}%</td>
+            </tr>
+            {% endfor %}
+            {% if not budget_items %}
+            <tr><td colspan="6" style="text-align:center;color:#9ca3af;padding:20px;">No budget data found for FY {{ summary.fiscal_year }}.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer"><p>Generated on {{ generated_at }} &bull; EAM System</p></div>
+    </div>
+    <script>
+      (function() {
+        try {
+          var items = {{ budget_items | tojson }};
+          if (document.getElementById('budgetChart') && items.length) {
+            var labels = items.map(function(i){ return i.cost_code; });
+            var budgeted = items.map(function(i){ return i.budgeted; });
+            var actual = items.map(function(i){ return i.actual; });
+            new Chart(document.getElementById('budgetChart').getContext('2d'), {
+              type: 'bar',
+              data: { labels: labels, datasets: [
+                { label: 'Budgeted', data: budgeted, backgroundColor: '#3b82f6' },
+                { label: 'Actual', data: actual, backgroundColor: '#f59e0b' }
+              ]},
+              options: { animation: false, plugins: { legend: { position: 'bottom' }, title: { display: true, text: 'Budget vs Actual', font: { size: 12 } } }, responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+          }
+          window.renderReady = true;
+        } catch(e) { console.error('Chart error:', e); window.renderReady = true; }
+      })();
+    </script>
+  </body>
+</html>

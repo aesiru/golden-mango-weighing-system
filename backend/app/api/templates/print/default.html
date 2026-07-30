@@ -1,0 +1,121 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ entity_label }} — {{ record_id }}</title>
+    {{ print_styles() }}
+    <style>
+      .meta-value {
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 0;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .table-container {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .document-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+        table-layout: fixed;
+      }
+      .document-table thead {
+        display: table-header-group;
+      }
+      .document-table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .document-table th,
+      .document-table td {
+        border: 1px solid #ddd;
+        padding: 4px;
+        text-align: left;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .document-table th {
+        background: #f3f4f6;
+        text-transform: uppercase;
+        font-size: 9px;
+        font-weight: 400;
+      }
+      .document-table td {
+        font-size: 10px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+      {{ branding_header(branding, title=entity_label, subtitle=record_id) }}
+
+      <!-- Document Details -->
+      <div class="form-section">
+        <div class="section-header"><span>Document Details</span></div>
+        <div class="meta-grid-4" style="margin-top: 8px">
+          {% for field in fields %}{% if field.field_type != 'text' %}
+          <div class="meta-item">
+            <span class="label">{{ field.label }}</span>
+            <span class="meta-value">
+              {% if field.field_type == 'boolean' %}{{ 'Yes' if field.value else
+              'No' }} {% elif field.value %}{{ field.value }} {% else %}—{%
+              endif %}
+            </span>
+          </div>
+          {% endif %}{% endfor %}
+        </div>
+      </div>
+
+      <!-- Text/Description fields (full width) -->
+      {% for field in fields %}{% if field.field_type == 'text' and field.value
+      %}
+      <div class="form-section">
+        <div class="section-header"><span>{{ field.label }}</span></div>
+        <p class="description-field">{{ field.value }}</p>
+      </div>
+      {% endif %}{% endfor %}
+
+      <!-- Child tables -->
+      {% for child in children %}
+      <div class="form-section">
+        <div class="section-header"><span>{{ child.label }}</span></div>
+        {% if child.rows %}
+        <div class="table-container">
+          <table class="document-table">
+            <thead>
+              <tr>
+                <th style="width: 24px">#</th>
+                {% for col in child.columns %}
+                <th>{{ col.label }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in child.rows %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                {% for col in child.columns %}
+                <td>{{ row.get(col.name, '') or '' }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p style="padding: 8px 0; color: #7f8c8d; font-size: 11px">
+          No records.
+        </p>
+        {% endif %}
+      </div>
+      {% endfor %} {{ print_footer(branding) }}
+    </div>
+  </body>
+</html>

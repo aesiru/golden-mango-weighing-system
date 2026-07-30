@@ -1,0 +1,185 @@
+{% from "_base.html" import print_styles, branding_header, print_footer %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Purchase Order — {{ record.id or record_id }}</title>
+    {{ print_styles() }}
+    <style>
+      .instructions {
+        font-size: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 6px;
+      }
+      .instructions ol {
+        margin: 4px 0 0 14px;
+        padding: 0;
+      }
+      .totals-table {
+        width: 280px;
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-top: 8px;
+      }
+      .totals-table td {
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+      .totals-table .lbl {
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+      {{ branding_header(branding, title="Purchase Order", subtitle=record.id or
+      record_id) }}
+
+      <!-- PO Details -->
+      <div class="form-section">
+        <div class="section-header"><span>Order Details</span></div>
+        <div class="meta-grid-4" style="margin-top: 6px">
+          <div class="meta-item">
+            <span class="label">PO Number</span>
+            <span class="value">{{ record.id or record_id }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Date</span>
+            <span class="value"
+              >{{ record.transaction_date or record.created_at or '' }}</span
+            >
+          </div>
+          <div class="meta-item">
+            <span class="label">Status</span>
+            <span class="value">{{ record.workflow_state or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Delivery Date</span>
+            <span class="value">{{ record.delivery_date or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Supplier</span>
+            <span class="value">{{ record.supplier or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Site</span>
+            <span class="value">{{ record.site or '' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="label">Terms</span>
+            <span class="value"
+              >{{ record.payment_terms or record.terms or '' }}</span
+            >
+          </div>
+          <div class="meta-item">
+            <span class="label">Purchase Request</span>
+            <span class="value">{{ record.purchase_request or '' }}</span>
+          </div>
+        </div>
+        {% if record.delivery_instructions or record.notes %}
+        <div style="margin-top: 6px">
+          <div class="meta-item">
+            <span class="label">Delivery Instructions / Notes</span>
+            <span class="value" style="font-weight: normal"
+              >{{ record.delivery_instructions or record.notes or '' }}</span
+            >
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Line Items -->
+      {% if line_items %}
+      <div class="form-section">
+        <div class="section-header"><span>Line Items</span></div>
+        <table class="doc-table">
+          {% set ns = namespace(total=0) %}
+          <thead>
+            <tr>
+              <th style="width: 28px">#</th>
+              <th>Description</th>
+              <th style="width: 50px">Qty</th>
+              <th style="width: 50px">Unit</th>
+              <th style="width: 80px">Unit Price</th>
+              <th style="width: 80px">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in line_items %} {% set line_total = (item.total or
+            '0')|replace(',', '')|replace('-', '0')|float %} {% set ns.total =
+            ns.total + line_total %}
+            <tr>
+              <td class="center">{{ loop.index }}</td>
+              <td>{{ item.description }}</td>
+              <td class="center">{{ item.qty }}</td>
+              <td class="center">{{ item.unit }}</td>
+              <td class="right">{{ item.unit_price }}</td>
+              <td class="right">{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="5" class="right"><strong>PO Total</strong></td>
+              <td class="right">
+                <strong>{{ "{:,.2f}".format(ns.total) }}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="6" style="font-style: italic; font-size: 10px">
+                ***Nothing Follows***
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="form-section">
+        <div class="section-header"><span>Line Items</span></div>
+        <p style="font-size: 11px; color: #888; padding: 4px 0">
+          No line items.
+        </p>
+      </div>
+      {% endif %}
+
+      <!-- Totals -->
+      {% if total_amount or subtotal or record.total_amount or record.subtotal
+      %}
+      <table class="totals-table">
+        {% if subtotal or record.subtotal %}
+        <tr>
+          <td class="lbl">Subtotal</td>
+          <td class="right">{{ subtotal or record.subtotal }}</td>
+        </tr>
+        {% endif %} {% if record.tax_amount %}
+        <tr>
+          <td class="lbl">Tax</td>
+          <td class="right">{{ record.tax_amount }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td class="lbl"><strong>Total Amount</strong></td>
+          <td class="right">
+            <strong>{{ total_amount or record.total_amount or '' }}</strong>
+          </td>
+        </tr>
+      </table>
+      {% endif %}
+
+      <!-- Signatures -->
+      <div class="sig-section" style="margin-top: 24px">
+        <div class="sig-block">
+          <div class="sig-line">Prepared by:</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line">Reviewed by:</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line">Authorized by:</div>
+        </div>
+      </div>
+
+      {{ print_footer(branding) }}
+    </div>
+  </body>
+</html>

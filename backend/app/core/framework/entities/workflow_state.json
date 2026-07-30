@@ -1,0 +1,136 @@
+{
+  "name": "workflow_state",
+  "label": "Workflow State",
+  "module": "core",
+  "table_name": "core_workflow_states",
+  "title_field": "label",
+  "in_sidebar": false,
+  "icon": "circle-dot",
+  "group": "Workflow",
+  "search_fields": [
+    "label",
+    "slug"
+  ],
+  "naming": "WFS-{#####}",
+  "is_system": true,
+  "fields": [
+    {
+      "name": "label",
+      "label": "Label",
+      "field_type": "string",
+      "required": true,
+      "in_list_view": true
+    },
+    {
+      "name": "slug",
+      "label": "Slug",
+      "field_type": "string",
+      "required": false,
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "color",
+      "label": "Color",
+      "field_type": "string",
+      "required": false,
+      "in_list_view": true,
+      "options": [
+        {
+          "value": "neutral",
+          "label": "Neutral"
+        },
+        {
+          "value": "red",
+          "label": "Red"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        },
+        {
+          "value": "amber",
+          "label": "Amber"
+        },
+        {
+          "value": "yellow",
+          "label": "Yellow"
+        },
+        {
+          "value": "lime",
+          "label": "Lime"
+        },
+        {
+          "value": "green",
+          "label": "Green"
+        },
+        {
+          "value": "emerald",
+          "label": "Emerald"
+        },
+        {
+          "value": "teal",
+          "label": "Teal"
+        },
+        {
+          "value": "cyan",
+          "label": "Cyan"
+        },
+        {
+          "value": "sky",
+          "label": "Sky"
+        },
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "indigo",
+          "label": "Indigo"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "purple",
+          "label": "Purple"
+        },
+        {
+          "value": "fuchsia",
+          "label": "Fuchsia"
+        },
+        {
+          "value": "pink",
+          "label": "Pink"
+        },
+        {
+          "value": "rose",
+          "label": "Rose"
+        }
+      ],
+      "default": "neutral"
+    },
+    {
+      "name": "created_at",
+      "label": "Created At",
+      "field_type": "datetime",
+      "readonly": true,
+      "in_list_view": true
+    },
+    {
+      "name": "updated_at",
+      "label": "Updated At",
+      "field_type": "datetime",
+      "readonly": true
+    }
+  ],
+  "rbac": {
+    "SystemManager": [
+      "*"
+    ],
+    "Administrator": [
+      "read"
+    ]
+  }
+}
