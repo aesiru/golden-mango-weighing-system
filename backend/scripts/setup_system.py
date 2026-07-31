@@ -288,6 +288,7 @@ async def step_seed(db) -> None:
     from app.core.seeds import run_all_seeds
     step("Running seed pipeline...")
     summary = await run_all_seeds(db)
+    await db.commit()
     ok(f"Seeding complete — {summary.total_created} records created, {summary.total_skipped} skipped.")
 
 

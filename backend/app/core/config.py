@@ -76,6 +76,12 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3002",
     ]
 
+    # MQTT Broker
+    MQTT_BROKER_HOST: str = "localhost"
+    MQTT_BROKER_PORT: int = 1883
+    MQTT_BROKER_USERNAME: Optional[str] = None
+    MQTT_BROKER_PASSWORD: Optional[str] = None
+
     # Socket.IO CORS origins. If not set, fall back to CORS_ORIGINS.
     # Provide as JSON array in .env, e.g.
     # SOCKETIO_CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]

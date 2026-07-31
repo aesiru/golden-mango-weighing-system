@@ -59,7 +59,15 @@ async def lifespan(app: FastAPI):
     app_init_service = AppInitializationService()
     app_init_service.initialize_scheduler()
 
+    # Start MQTT weight-reading subscriber (ESP32 scales)
+    from app.infrastructure.mqtt.mqtt_client import MqttWeightSubscriber
+    mqtt_subscriber = MqttWeightSubscriber()
+    await mqtt_subscriber.start()
+
     yield
+
+    # Shutdown MQTT subscriber
+    await mqtt_subscriber.stop()
 
     # Shutdown scheduler on app exit
     app_init_service.shutdown_scheduler()

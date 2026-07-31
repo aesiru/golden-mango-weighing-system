@@ -20,3 +20,4 @@ asyncpg
 psycopg2-binary
 apscheduler
 aiosmtplib
+aiomqtt

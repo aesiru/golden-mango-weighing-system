@@ -58,6 +58,7 @@ async def run_all_seeds(db: AsyncSession) -> SeedSummary:
     from app.core.seeds.workflow_states import seed_workflow_states
     from app.core.seeds.workflow_actions import seed_workflow_actions
     from app.core.seeds.workflows import seed_workflows
+    from app.core.seeds.warehouse import seed_warehouse
     summary = SeedSummary()
 
     print("🌱 Running seed pipeline...")
@@ -70,6 +71,10 @@ async def run_all_seeds(db: AsyncSession) -> SeedSummary:
     summary.add(await seed_workflow_states(db))
     summary.add(await seed_workflow_actions(db))
     summary.add(await seed_workflows(db))
+
+    # 3. Warehouse domain — company, crate classes, default order
+    wh_summary = await seed_warehouse(db)
+    summary.results.extend(wh_summary.results)
 
     summary.print_report()
     return summary
