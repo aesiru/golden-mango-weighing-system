@@ -29,6 +29,14 @@ async function main() {
   });
   console.log('  Admin user created (admin / admin123)');
 
+  // Default device (matches firmware's MQTT_PUBLISH_TOPIC "device_0/weight")
+  await prisma.device.upsert({
+    where: { id: 'device_0' },
+    update: {},
+    create: { id: 'device_0', name: 'device_0' },
+  });
+  console.log('  Default device created (device_0)');
+
   // CrateClasses
   const classes = [
     { id: 'CC-SMALL', name: 'Small', min_weight: 150, max_weight: 250 },

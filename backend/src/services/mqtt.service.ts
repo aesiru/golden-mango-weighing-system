@@ -75,6 +75,15 @@ export class MqttService {
 
     try {
       await prisma.$transaction(async (tx) => {
+        // Find or create device — id from topic, auto-generated name
+        let device = await tx.device.findUnique({ where: { id: deviceId } });
+        if (!device) {
+          const count = await tx.device.count();
+          device = await tx.device.create({
+            data: { id: deviceId, name: `device_${count}` },
+          });
+        }
+
         // Find or create order (oldest pending/in-progress for this class)
         let order = await tx.order.findFirst({
           where: {
@@ -128,6 +137,7 @@ export class MqttService {
             id: shortId('RDG'),
             crate_id: crate.id,
             order_id: order.id,
+            device_id: device.id,
             weight_grams: weightGrams,
             recorded_at: new Date(),
             valid,

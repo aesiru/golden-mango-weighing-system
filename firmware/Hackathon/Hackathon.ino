@@ -35,8 +35,8 @@
 // ── MQTT ──────────────────────────────────────────────────────────────────────
 #define MQTT_BROKER           "10.40.71.67"
 #define MQTT_PORT             1883
-#define MQTT_SUBSCRIBE_TOPIC  "weight/display"
-#define MQTT_PUBLISH_TOPIC    "weight/value"
+#define MQTT_SUBSCRIBE_TOPIC  "device_0/display"
+#define MQTT_PUBLISH_TOPIC    "device_0/weight"
 
 // ── Hardware pins ─────────────────────────────────────────────────────────────
 //  ESP32-C5-DevKitC-1: LP_I2C on J1 — pin 3=GPIO2(SDA), pin 4=GPIO3(SCL)

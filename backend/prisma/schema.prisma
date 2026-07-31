@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -61,15 +61,25 @@ model Crate {
   updated_at     DateTime    @updatedAt
 }
 
+model Device {
+  id         String    @id
+  name       String    @unique
+  readings   Reading[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+}
+
 model Reading {
   id           String   @id
   crate_id     String?
   order_id     String?
+  device_id    String?
   weight_grams Float
   recorded_at  DateTime @default(now())
   valid        Boolean  @default(false)
   crate        Crate?   @relation(fields: [crate_id], references: [id])
   order        Order?   @relation(fields: [order_id], references: [id])
+  device       Device?  @relation(fields: [device_id], references: [id])
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 }
