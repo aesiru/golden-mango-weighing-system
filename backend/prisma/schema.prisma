@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id                String   @id
+  name              String?
+  contact_person    String?
+  email             String?  @unique
+  phone             String?
+  address           String?
+  registration_date DateTime?
+  status            String   @default("pending")
+  orders            Order[]
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+}
+
+model CrateClass {
+  id         String   @id
+  name       String
+  min_weight Float
+  max_weight Float
+  orders     Order[]
+  crates     Crate[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Order {
+  id             String      @id
+  company_id     String?
+  crate_class_id String
+  total_amount   Float       @default(0)
+  current_amount Float       @default(0)
+  status         String      @default("pending")
+  company        Company?    @relation(fields: [company_id], references: [id])
+  crate_class    CrateClass  @relation(fields: [crate_class_id], references: [id])
+  crates         Crate[]
+  readings       Reading[]
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+}
+
+model Crate {
+  id             String      @id
+  code           String      @unique
+  order_id       String
+  crate_class_id String
+  target         Float       @default(50)
+  counted        Float       @default(0)
+  order          Order       @relation(fields: [order_id], references: [id])
+  crate_class    CrateClass  @relation(fields: [crate_class_id], references: [id])
+  readings       Reading[]
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+}
+
+model Reading {
+  id           String   @id
+  crate_id     String?
+  order_id     String?
+  weight_grams Float
+  recorded_at  DateTime @default(now())
+  valid        Boolean  @default(false)
+  crate        Crate?   @relation(fields: [crate_id], references: [id])
+  order        Order?   @relation(fields: [order_id], references: [id])
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model User {
+  id              String   @id
+  username        String   @unique
+  email           String   @unique
+  full_name       String
+  hashed_password String
+  is_active       Boolean  @default(true)
+  is_superuser    Boolean  @default(false)
+  first_name      String?
+  last_name       String?
+  contact_number  String?
+  department      String?
+  site            String?
+  employee_id     String?
+  roles           Role[]
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model Role {
+  id          String   @id
+  name        String   @unique
+  description String?
+  is_active   Boolean  @default(true)
+  users       User[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
